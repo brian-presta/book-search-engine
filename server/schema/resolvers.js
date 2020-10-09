@@ -17,7 +17,6 @@ const resolvers = {
                 console.log(user)
                 const foundUser = await User.findOne({username: user.username})
                     .select('-__v -password')
-                    .populate('savedBooks')
                     return foundUser
             }
             catch(err) {
@@ -55,10 +54,10 @@ const resolvers = {
             console.log(input)
             try {
                 const updatedUser = await User.findOneAndUpdate(
-                    {username: user.username},
-                    {$addToSet: { savedBooks:input} },
-                    {new: true}
-                ).populate('savedBooks')
+                    { _id: user._id },
+                    { $addToSet: { savedBooks: input } },
+                    { new: true, runValidators: true }
+                  )
                 return updatedUser
             }
             catch(err) {
@@ -70,9 +69,9 @@ const resolvers = {
             try {
                 const updatedUser = await User.findOneAndUpdate(
                     {username: user.username},
-                    {$pull: {bookId}},
+                    {$pull: {savedBooks: {bookId} }},
                     {new: true}
-                ).populate('savedBooks')
+                )
                 return updatedUser
             }
             catch(err) {
