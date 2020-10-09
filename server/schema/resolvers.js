@@ -14,7 +14,8 @@ const resolvers = {
         me: async (parent, args, { user }) => {
             checkLoggedIn(user)
             try {
-                const foundUser = await User.findOne({_id: user.id})
+                console.log(user)
+                const foundUser = await User.findOne({username: user.username})
                     .select('-__v -password')
                     .populate('savedBooks')
                     return foundUser
@@ -50,10 +51,12 @@ const resolvers = {
         },
         saveBook: async (parent, args, { user }) => {
             checkLoggedIn(user)
+            const input = args.input
+            console.log(input)
             try {
                 const updatedUser = await User.findOneAndUpdate(
-                    {_id: user.id},
-                    {$addToSet: {...args}},
+                    {username: user.username},
+                    {$addToSet: { savedBooks:input} },
                     {new: true}
                 ).populate('savedBooks')
                 return updatedUser
@@ -66,7 +69,7 @@ const resolvers = {
             checkLoggedIn(user)
             try {
                 const updatedUser = await User.findOneAndUpdate(
-                    {_id: user.id},
+                    {username: user.username},
                     {$pull: {bookId}},
                     {new: true}
                 ).populate('savedBooks')
