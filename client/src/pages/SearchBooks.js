@@ -47,6 +47,7 @@ const SearchBooks = () => {
         title: book.volumeInfo.title,
         description: book.volumeInfo.description,
         image: book.volumeInfo.imageLinks?.thumbnail || '',
+        link: `https://books.google.com/books?id=${book.id}`
       }));
 
       setSearchedBooks(bookData);
