@@ -20,14 +20,11 @@ const SearchBooks = () => {
   const [saveBook, { error }] = useMutation(SAVE_BOOK, {
     update(cache, { data: { saveBook }}) {
       const {  me } = cache.readQuery( { query: GET_ME})
-      console.log(me)
-      const { savedBooks } = me
-      console.log(saveBook)
       cache.writeQuery({
         query: GET_ME,
         data: { me: {
           ...me,
-          savedBooks: [...savedBooks, saveBook]
+          savedBooks: [...me.savedBooks, saveBook]
         }}
       }) 
     }
@@ -85,11 +82,7 @@ const SearchBooks = () => {
     }
 
     try {
-      console.log(bookToSave)
       await saveBook({variables: {input: bookToSave}});
-
-      
-
       // if book successfully saves to user's account, save book id to state
       setSavedBookIds([...savedBookIds, bookToSave.bookId]);
     } catch (err) {
@@ -141,6 +134,7 @@ const SearchBooks = () => {
                   <Card.Title>{book.title}</Card.Title>
                   <p className='small'>Authors: {book.authors}</p>
                   <Card.Text>{book.description}</Card.Text>
+                  <a href={book.link} className="mb-1">View on Google Books</a>
                   {Auth.loggedIn() && (
                     <Button
                       disabled={savedBookIds?.some((savedBookId) => savedBookId === book.bookId)}

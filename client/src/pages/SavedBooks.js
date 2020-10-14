@@ -13,8 +13,6 @@ const SavedBooks = () => {
   const [removeBook, { error }] = useMutation(REMOVE_BOOK, {
     update(cache, { data: { removeBook }}) {
       const { me } = cache.readQuery( { query: GET_ME})
-      console.log(me)
-      console.log(removeBook)
       cache.writeQuery({
         query: GET_ME,
         data: { me: {
@@ -34,7 +32,6 @@ const SavedBooks = () => {
       return false;
     }
     try {
-      console.log(bookId)
       await removeBook({variables: {bookId} })
       // upon success, remove book's id from localStorage
       removeBookId(bookId);
@@ -70,6 +67,7 @@ const SavedBooks = () => {
                   <Card.Title>{book.title}</Card.Title>
                   <p className='small'>Authors: {book.authors}</p>
                   <Card.Text>{book.description}</Card.Text>
+                  <a href={book.link} className="mb-1">View on Google Books</a>
                   <Button className='btn-block btn-danger' onClick={() => handleDeleteBook(book.bookId)}>
                     Delete this Book!
                   </Button>
