@@ -22,16 +22,15 @@ const LoginForm = () => {
 
     // check if form has everything (as per react-bootstrap docs)
     const form = event.currentTarget;
+    event.preventDefault();
     if (form.checkValidity() === false) {
-      event.preventDefault();
       event.stopPropagation();
     }
 
     try {
       console.log(userFormData)
-      const { token, user } =  loginUser(userFormData);
-      console.log(user);
-      Auth.login(token);
+      const { data } = await loginUser({variables:userFormData});
+      Auth.login(data.login.token)
     } catch (error) {
       console.error(error);
       setShowAlert(true);
@@ -56,6 +55,7 @@ const LoginForm = () => {
             type='text'
             placeholder='Your email'
             name='email'
+            email
             onChange={handleInputChange}
             value={userFormData.email}
             required
