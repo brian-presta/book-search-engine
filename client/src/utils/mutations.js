@@ -28,9 +28,12 @@ export const SAVE_BOOK = gql`
         saveBook(input: $input) {
             username
             savedBooks {
-                title
-                authors
                 bookId
+                authors
+                description
+                title
+                image
+                link
             }
         }
     }
@@ -41,9 +44,12 @@ export const REMOVE_BOOK = gql`
         removeBook(bookId: $bookId) {
             username
             savedBooks {
-                title
-                authors
                 bookId
+                authors
+                description
+                title
+                image
+                link
             }
         }
     }
